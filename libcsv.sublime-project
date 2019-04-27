@@ -1,0 +1,27 @@
+{
+	"folders":
+	[
+		{
+			"path": "."
+		}
+	],
+	"settings":
+	{
+		"tab_size": 4,
+		"detect_indentation": false,
+		"translate_tabs_to_spaces": true,
+		"trim_automatic_white_space": true,
+		"SublimeLinter.linters.gcc.include_dirs":
+		[
+			"include",
+			"../libmy/include"
+		],
+		"SublimeLinter.linters.gcc.c_extra_flags":
+		[
+			"-Wall",
+			"-Wextra",
+			"-pedantic",
+			"-fsyntax-only"
+		]
+	}
+}
