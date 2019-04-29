@@ -10,17 +10,28 @@
 
 #include "csv.h"
 
-static int load_keys(csv_t *csv, FILE *fp, size_t *y)
+static ssize_t readfile(FILE *fp, char **dest)
 {
     size_t n = 0;
+    ssize_t s = 0;
+
+    if ((s = getline(dest, &n, fp)) == EOF)
+        return -1;
+
+    (*dest)[s - 1] = '\0';
+
+    return s;
+}
+
+static int load_keys(csv_t *csv, FILE *fp, size_t *y)
+{
     ssize_t len = 0;
     char *tok = NULL;
     char *line = NULL;
 
-    if ((len = getline(&line, &n, fp)) == EOF)
+    if ((len = readfile(fp, &line)) == EOF)
         return -1;
 
-    line[len - 1] = '\0';
     tok = my_strtok(line, ",");
 
     for (*y = 0; tok != NULL; (*y)++, tok = my_strtok(NULL, ",")) {
@@ -35,10 +46,9 @@ static int load_keys(csv_t *csv, FILE *fp, size_t *y)
 
 static int load_values(csv_t *csv, FILE *fp, size_t *y)
 {
-    size_t n = 0;
     char *line = NULL;
 
-    for (*y = 0; getline(&line, &n, fp) != EOF; (*y)++) {
+    for (*y = 0; readfile(fp, &line) != EOF; (*y)++) {
         char *tok = my_strtok(line, ",");
 
         if (EXTEND(csv->values, *y) == NULL)
